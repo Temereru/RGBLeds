@@ -1,7 +1,9 @@
 #include <Adafruit_NeoPixel.h>
 
+// The digital pin in the board you will connect you data cable to, no need to touch this.
 #define PIN 6
 
+// The number of individual LEDs in the strip you will use.
 #define LEDS 90
 
 // Parameter 1 = number of pixels in strip
@@ -13,36 +15,19 @@
 //   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(LEDS, PIN, NEO_GRB + NEO_KHZ800);
 
+// Runs at start
 void setup() {
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
 }
 
+// Run every cycle, you code should go here.
 void loop() {
-  // Some example procedures showing how to display to the pixels:
-  //  colorWipe(strip.Color(255, 0, 0), 50); // Red
-  //  colorWipe(strip.Color(0, 255, 0), 50); // Green
-  //  colorWipe(strip.Color(0, 0, 255), 50); // Blue
-  //
-  //  // Send a theater pixel chase in...
-  //  theaterChase(strip.Color(127, 127, 127), 50); // White
-  //  theaterChase(strip.Color(127,   0,   0), 50); // Red
-  //  theaterChase(strip.Color(  0,   0, 127), 50); // Blue
-
   rainbow(20);
   rainbowCycle(20);
-  //  theaterChaseRainbow(50);
 }
 
-// Fill the dots one after the other with a color
-void colorWipe(uint32_t c, uint8_t wait) {
-  for (uint16_t i = 0; i < strip.numPixels(); i++) {
-    strip.setPixelColor(i, c);
-    strip.show();
-    delay(wait);
-  }
-}
-
+// Cycle through the colors throught the strip
 void rainbow(uint8_t wait) {
   uint16_t i, j;
 
@@ -68,39 +53,11 @@ void rainbowCycle(uint8_t wait) {
   }
 }
 
-//Theatre-style crawling lights.
-void theaterChase(uint32_t c, uint8_t wait) {
-  for (int j = 0; j < 10; j++) { //do 10 cycles of chasing
-    for (int q = 0; q < 3; q++) {
-      for (int i = 0; i < strip.numPixels(); i = i + 3) {
-        strip.setPixelColor(i + q, c);  //turn every third pixel on
-      }
-      strip.show();
-
-      delay(wait);
-
-      for (int i = 0; i < strip.numPixels(); i = i + 3) {
-        strip.setPixelColor(i + q, 0);      //turn every third pixel off
-      }
-    }
-  }
-}
-
-//Theatre-style crawling lights with rainbow effect
-void theaterChaseRainbow(uint8_t wait) {
-  for (int j = 0; j < 256; j++) {   // cycle all 256 colors in the wheel
-    for (int q = 0; q < 3; q++) {
-      for (int i = 0; i < strip.numPixels(); i = i + 3) {
-        strip.setPixelColor(i + q, Wheel( (i + j) % 255)); //turn every third pixel on
-      }
-      strip.show();
-
-      delay(wait);
-
-      for (int i = 0; i < strip.numPixels(); i = i + 3) {
-        strip.setPixelColor(i + q, 0);      //turn every third pixel off
-      }
-    }
+// Set the entire strip to the same color, each color is a number from 0-255
+// Look in here to get the values for the color you want (inside the rgb()): https://www.w3schools.com/colors/colors_picker.asp
+void singleColor(uint8_t red, uint8_t green, uint8_t blue) {
+  for (i = 0; i < strip.numPixels(); i++) {
+      strip.setPixelColor(i, strip.Color(red, green, blue));
   }
 }
 
